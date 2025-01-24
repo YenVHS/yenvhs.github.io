@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotiboy App</title>
+    <style>
+        body {
+            background-color: brown;
+            color: yellow;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .menu-item {
+            margin: 20px;
+            padding: 20px;
+            background-color: darkbrown;
+            border-radius: 10px;
+            width: 300px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        .menu-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .button {
+            background-color: yellow;
+            color: brown;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: orange;
+        }
+        .cart {
+            font-size: 20px;
+        }
+        .checkout-container {
+            display: none;
+            background-color: brown;
+            color: white;
+            padding: 50px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .option-button {
+            background-color: yellow;
+            color: brown;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        .option-button:hover {
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Main Menu Page -->
+<div class="container" id="menu-page">
+    <h1>Welcome to Rotiboy</h1>
+
+    <!-- Menu Items -->
+    <div class="menu-item">
+        <img src="https://rotiboy.sg/Uploads/Product/500x500/1624012559-9.jpg" alt="Cheese Boy">
+        <h2>Cheese Boy</h2>
+        <p>A delightful bun filled with a creamy and savory cheese center, perfect for cheese lovers.</p>
+        <p>$6.00</p>
+        <label for="quantity-cheeseboy">Quantity: </label>
+        <input type="number" id="quantity-cheeseboy" value="0" min="0" max="10">
+        <br><br>
+        <button class="button" onclick="addToCart('Cheese Boy', 6.00, 'quantity-cheeseboy')">Add to Cart</button>
+    </div>
+
+    <div class="menu-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp29AYotCuevPhimnQxQXfaxkRQGiINhCeI6KRen6Z_axTKCxvo9kLxxTa1Fk2paR9lfw&usqp=CAU" alt="Roti Boy">
+        <h2>Roti Boy</h2>
+        <p>The classic Rotiboy bun with a crispy coffee-flavored crust and a buttery filling.</p>
+        <p>$5.00</p>
+        <label for="quantity-rotiboy">Quantity: </label>
+        <input type="number" id="quantity-rotiboy" value="0" min="0" max="10">
+        <br><br>
+        <button class="button" onclick="addToCart('Roti Boy', 5.00, 'quantity-rotiboy')">Add to Cart</button>
+    </div>
+
+    <div class="menu-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-C9sv4JV9eJkCxHGw7XvJ8cXdCSR9zBZM_xQRetGHOT0ICZJesmkK9kcefLx9C1-JEZw&usqp=CAU" alt="Mocha Boy">
+        <h2>Mocha Boy</h2>
+        <p>A soft bun with a rich mocha-flavored crust and a velvety buttery filling.</p>
+        <p>$5.50</p>
+        <label for="quantity-mochaboy">Quantity: </label>
+        <input type="number" id="quantity-mochaboy" value="0" min="0" max="10">
+        <br><br>
+        <button class="button" onclick="addToCart('Mocha Boy', 5.50, 'quantity-mochaboy')">Add to Cart</button>
+    </div>
+
+    <div class="menu-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0SdBB2Lere7efUTWzi6DPyAsUe2Ia3bUQGoB8P8GYgZB5QZRwac0W2YK1qvZKGgvjocs&usqp=CAU" alt="Butte$ilk Boy">
+        <h2>Butte$ilk Boy</h2>
+        <p>A soft and fluffy bun infused with the rich and creamy taste of butte$ilk.</p>
+        <p>$6.00</p>
+        <label for="quantity-butte$ilkboy">Quantity: </label>
+        <input type="number" id="quantity-butte$ilkboy" value="0" min="0" max="10">
+        <br><br>
+        <button class="button" onclick="addToCart('Butte$ilk Boy', 6.00, 'quantity-butte$ilkboy')">Add to Cart</button>
+    </div>
+
+    <div class="cart">
+        <p id="cart-status">Your cart is empty.</p>
+    </div>
+
+    <button class="button" onclick="goToCheckout()">Go to Checkout</button>
+</div>
+
+<!-- Checkout Page -->
+<div id="checkout-page" class="checkout-container">
+    <div>
+        <h2>Please choose your option:</h2>
+        <button class="option-button" onclick="selectOption('Dine In')">Dine In</button>
+        <button class="option-button" onclick="selectOption('Grab to Go')">Grab to Go</button>
+        <br><br>
+        <button class="button" onclick="finalCheckout()">Checkout</button>
+    </div>
+</div>
+
+<script>
+    let cart = [];
+    let selectedOption = null;
+
+    function addToCart(item, price, quantityId) {
+        const quantityInput = document.getElementById(quantityId);
+        const quantity = parseInt(quantityInput.value);
+
+        if (!quantity || quantity <= 0) {
+            alert("Please enter a valid quantity.");
+            return;
+        }
+
+        let itemExists = cart.find(cartItem => cartItem.item === item);
+
+        if (itemExists) {
+            itemExists.quantity += quantity;
+        } else {
+            cart.push({
+                item: item,
+                price: price,
+                quantity: quantity
+            });
+        }
+
+        quantityInput.value = 0; // Reset the quantity input after adding to cart
+        updateCartStatus();
+    }
+
+    function updateCartStatus() {
+        let cartStatus = document.getElementById('cart-status');
+        let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+        if (totalItems > 0) {
+            cartStatus.innerText = `You have ${totalItems} item(s) in your cart.`;
+        } else {
+            cartStatus.innerText = "Your cart is empty.";
+        }
+    }
+
+    function goToCheckout() {
+        if (cart.length === 0) {
+            alert("Your cart is empty. Please add items to proceed.");
+            return;
+        }
+
+        document.getElementById('menu-page').style.display = 'none';
+        document.getElementById('checkout-page').style.display = 'flex';
+    }
+
+    function selectOption(option) {
+        selectedOption = option;
+        alert(`You selected: ${option}`);
+    }
+
+    function finalCheckout() {
+        if (!selectedOption) {
+            alert("Please choose either Dine In or Grab to Go.");
+            return;
+        }
+
+        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+        const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+
+        alert(`Order Summary:\nOption: ${selectedOption}\nTotal Items: ${totalItems}\nTotal Price: $${totalPrice}`);
+    }
+</script>
+
+</body>
+</html>
