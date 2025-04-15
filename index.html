@@ -1,209 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rotiboy App</title>
-    <style>
-        body {
-            background-color: brown;
-            color: yellow;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            text-align: center;
-            margin-top: 50px;
-        }
-        .menu-item {
-            margin: 20px;
-            padding: 20px;
-            background-color: darkbrown;
-            border-radius: 10px;
-            width: 300px;
-            display: inline-block;
-            margin-bottom: 30px;
-        }
-        .menu-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-        .button {
-            background-color: yellow;
-            color: brown;
-            border: none;
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .button:hover {
-            background-color: orange;
-        }
-        .cart {
-            font-size: 20px;
-        }
-        .checkout-container {
-            display: none;
-            background-color: brown;
-            color: white;
-            padding: 50px;
-            text-align: center;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .option-button {
-            background-color: yellow;
-            color: brown;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            margin: 10px;
-            border-radius: 5px;
-        }
-        .option-button:hover {
-            background-color: orange;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Leave Application Form</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    input, textarea { display: block; margin-bottom: 1rem; width: 100%; }
+    button { padding: 0.5rem 1rem; }
+  </style>
 </head>
 <body>
+  <h2>Leave Application Form</h2>
+  <input type="text" id="staffName" placeholder="Staff Name" />
+  <input type="date" id="startDate" />
+  <input type="date" id="endDate" />
+  <textarea id="reason" placeholder="Reason (required if after 16th)"></textarea>
+  <button onclick="submitForm()">Submit</button>
 
-<!-- Main Menu Page -->
-<div class="container" id="menu-page">
-    <h1>Welcome to Rotiboy</h1>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script>
+    const API_URL = "YOUR_WEB_APP_URL";
 
-    <!-- Menu Items -->
-    <div class="menu-item">
-        <img src="https://rotiboy.sg/Uploads/Product/500x500/1624012559-9.jpg" alt="Cheese Boy">
-        <h2>Cheese Boy</h2>
-        <p>A delightful bun filled with a creamy and savory cheese center, perfect for cheese lovers.</p>
-        <p>$6.00</p>
-        <label for="quantity-cheeseboy">Quantity: </label>
-        <input type="number" id="quantity-cheeseboy" value="0" min="0" max="10">
-        <br><br>
-        <button class="button" onclick="addToCart('Cheese Boy', 6.00, 'quantity-cheeseboy')">Add to Cart</button>
-    </div>
+    async function submitForm() {
+      const name = document.getElementById("staffName").value;
+      const start = document.getElementById("startDate").value;
+      const end = document.getElementById("endDate").value;
+      const reason = document.getElementById("reason").value;
 
-    <div class="menu-item">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp29AYotCuevPhimnQxQXfaxkRQGiINhCeI6KRen6Z_axTKCxvo9kLxxTa1Fk2paR9lfw&usqp=CAU" alt="Roti Boy">
-        <h2>Roti Boy</h2>
-        <p>The classic Rotiboy bun with a crispy coffee-flavored crust and a buttery filling.</p>
-        <p>$5.00</p>
-        <label for="quantity-rotiboy">Quantity: </label>
-        <input type="number" id="quantity-rotiboy" value="0" min="0" max="10">
-        <br><br>
-        <button class="button" onclick="addToCart('Roti Boy', 5.00, 'quantity-rotiboy')">Add to Cart</button>
-    </div>
+      const today = new Date();
+      if (today.getDate() > 16 && reason.trim() === "") {
+        showToast("Emergency reason required for applications after the 16th", "red");
+        return;
+      }
 
-    <div class="menu-item">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-C9sv4JV9eJkCxHGw7XvJ8cXdCSR9zBZM_xQRetGHOT0ICZJesmkK9kcefLx9C1-JEZw&usqp=CAU" alt="Mocha Boy">
-        <h2>Mocha Boy</h2>
-        <p>A soft bun with a rich mocha-flavored crust and a velvety buttery filling.</p>
-        <p>$5.50</p>
-        <label for="quantity-mochaboy">Quantity: </label>
-        <input type="number" id="quantity-mochaboy" value="0" min="0" max="10">
-        <br><br>
-        <button class="button" onclick="addToCart('Mocha Boy', 5.50, 'quantity-mochaboy')">Add to Cart</button>
-    </div>
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ StaffName: name, StartDate: start, EndDate: end, Reason: reason }),
+        headers: { "Content-Type": "application/json" }
+      });
 
-    <div class="menu-item">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0SdBB2Lere7efUTWzi6DPyAsUe2Ia3bUQGoB8P8GYgZB5QZRwac0W2YK1qvZKGgvjocs&usqp=CAU" alt="Butte$ilk Boy">
-        <h2>Buttemilk Boy</h2>
-        <p>A soft and fluffy bun infused with the rich and creamy taste of buttemilk.</p>
-        <p>$6.00</p>
-        <label for="quantity-buttemilkboy">Quantity: </label>
-        <input type="number" id="quantity-buttemilkboy" value="0" min="0" max="10">
-        <br><br>
-        <button class="button" onclick="addToCart('Buttemilk Boy', 6.00, 'quantity-buttemilkboy')">Add to Cart</button>
-    </div>
-
-    <div class="cart">
-        <p id="cart-status">Your cart is empty.</p>
-    </div>
-
-    <button class="button" onclick="goToCheckout()">Go to Checkout</button>
-</div>
-
-<!-- Checkout Page -->
-<div id="checkout-page" class="checkout-container">
-    <div>
-        <h2>Please choose your option:</h2>
-        <button class="option-button" onclick="selectOption('Dine In')">Dine In</button>
-        <button class="option-button" onclick="selectOption('Grab to Go')">Grab to Go</button>
-        <br><br>
-        <button class="button" onclick="finalCheckout()">Checkout</button>
-    </div>
-</div>
-
-<script>
-    let cart = [];
-    let selectedOption = null;
-
-    function addToCart(item, price, quantityId) {
-        const quantityInput = document.getElementById(quantityId);
-        const quantity = parseInt(quantityInput.value);
-
-        if (!quantity || quantity <= 0) {
-            alert("Please enter a valid quantity.");
-            return;
-        }
-
-        let itemExists = cart.find(cartItem => cartItem.item === item);
-
-        if (itemExists) {
-            itemExists.quantity += quantity;
-        } else {
-            cart.push({
-                item: item,
-                price: price,
-                quantity: quantity
-            });
-        }
-
-        quantityInput.value = 0; // Reset the quantity input after adding to cart
-        updateCartStatus();
+      const json = await res.json();
+      if (json.success) {
+        showToast("Leave submitted!", "green");
+      } else {
+        showToast(json.message, "red");
+      }
     }
 
-    function updateCartStatus() {
-        let cartStatus = document.getElementById('cart-status');
-        let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-
-        if (totalItems > 0) {
-            cartStatus.innerText = `You have ${totalItems} item(s) in your cart.`;
-        } else {
-            cartStatus.innerText = "Your cart is empty.";
-        }
+    function showToast(msg, color) {
+      Toastify({
+        text: msg,
+        duration: 3000,
+        gravity: "top",
+        backgroundColor: color
+      }).showToast();
     }
-
-    function goToCheckout() {
-        if (cart.length === 0) {
-            alert("Your cart is empty. Please add items to proceed.");
-            return;
-        }
-
-        document.getElementById('menu-page').style.display = 'none';
-        document.getElementById('checkout-page').style.display = 'flex';
-    }
-
-    function selectOption(option) {
-        selectedOption = option;
-        alert(`You selected: ${option}`);
-    }
-
-    function finalCheckout() {
-        if (!selectedOption) {
-            alert("Please choose either Dine In or Grab to Go.");
-            return;
-        }
-
-        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-        const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
-
-        alert(`Order Summary:\nOption: ${selectedOption}\nTotal Items: ${totalItems}\nTotal Price: $${totalPrice}`);
-    }
-</script>
-
+  </script>
 </body>
 </html>
