@@ -1,61 +1,1941 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Leave Application Form</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-  <style>
-    body { font-family: sans-serif; padding: 2rem; }
-    input, textarea { display: block; margin-bottom: 1rem; width: 100%; }
-    button { padding: 0.5rem 1rem; }
-  </style>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Logbook" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#0b0e14" />
+<meta name="application-name" content="Logbook" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛽</text></svg>" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛽</text></svg>" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>⛽ Logbook — Fuel Tracker</title>
+    <style>
+        /* ─── RESET & BASE ─── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0b0e14;
+            --bg-secondary: #131820;
+            --bg-card: #1a212c;
+            --bg-card-hover: #222b3a;
+            --bg-input: #0f141e;
+            --border-color: #2a3442;
+            --text-primary: #f0f4fa;
+            --text-secondary: #8899b4;
+            --text-muted: #5a6a82;
+            --accent-blue: #4f8cff;
+            --accent-blue-glow: rgba(79, 140, 255, 0.15);
+            --accent-green: #2ecc71;
+            --accent-orange: #f39c12;
+            --accent-red: #e74c3c;
+            --accent-purple: #a855f7;
+            --radius: 14px;
+            --radius-sm: 10px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 24px 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            line-height: 1.5;
+        }
+
+        .app {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 8px 0 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 28px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 40%, var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-badge {
+            background: var(--accent-blue-glow);
+            color: var(--accent-blue);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(79, 140, 255, 0.2);
+        }
+
+        .header-car-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-card);
+            padding: 6px 18px 6px 16px;
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            font-size: 0.8rem;
+        }
+
+        .header-car-info:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 24px var(--accent-blue-glow);
+        }
+
+        .header-car-info .car-name {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-car-info .car-detail {
+            color: var(--text-secondary);
+        }
+
+        .header-car-info .car-divider {
+            color: var(--text-muted);
+            opacity: 0.4;
+        }
+
+        .header-car-info .car-plate {
+            font-weight: 700;
+            color: var(--accent-blue);
+            letter-spacing: 0.5px;
+            background: var(--accent-blue-glow);
+            padding: 2px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(79, 140, 255, 0.15);
+            font-size: 0.75rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-1px);
+            border-color: var(--accent-blue);
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: #fff;
+            border-color: var(--accent-blue);
+        }
+        .btn-primary:hover {
+            background: #3a7aee;
+            border-color: #3a7aee;
+            box-shadow: 0 0 24px var(--accent-blue-glow);
+        }
+
+        .btn-danger {
+            background: var(--accent-red);
+            color: #fff;
+            border-color: var(--accent-red);
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border-color: transparent;
+            color: var(--text-secondary);
+        }
+        .btn-ghost:hover {
+            background: var(--bg-card);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.75rem;
+        }
+        .btn-xs {
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            border-radius: 6px;
+        }
+
+        /* ─── CARDS ─── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card-header:hover .collapse-icon {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card-title .badge {
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 400;
+        }
+
+        .collapse-icon {
+            color: var(--text-muted);
+            transition: var(--transition);
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+
+        .card-body {
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .card-body.hidden {
+            display: none;
+        }
+
+        /* ─── FORM ─── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 14px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            width: 100%;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px var(--accent-blue-glow);
+            background: var(--bg-primary);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding-top: 4px;
+            grid-column: 1 / -1;
+            flex-wrap: wrap;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
+        }
+
+        .toggle-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--bg-input);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .toggle.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .toggle .toggle-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .toggle.active .toggle-knob {
+            left: 22px;
+        }
+
+        .hidden-field {
+            display: none;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .hidden-field.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        /* ─── FILTER BAR (inside Trip Log header) ─── */
+        .filter-inline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-inline .filter-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text-secondary);
+        }
+
+        .filter-inline .form-group {
+            flex: 0 1 120px;
+            min-width: 100px;
+        }
+
+        .filter-inline .form-group input,
+        .filter-inline .form-group select {
+            padding: 6px 10px;
+            font-size: 0.75rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            outline: none;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .filter-inline .form-group input:focus,
+        .filter-inline .form-group select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px var(--accent-blue-glow);
+        }
+
+        .filter-inline .filter-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .filter-inline .btn-sm {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+
+        /* ─── SUMMARY GRID ─── */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            padding: 16px 14px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 40%, var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-number.green {
+            background: linear-gradient(135deg, #fff 40%, var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-number.orange {
+            background: linear-gradient(135deg, #fff 40%, var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-number.purple {
+            background: linear-gradient(135deg, #fff 40%, var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* ─── TABLE ─── */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        thead {
+            background: var(--bg-input);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 14px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        th:hover {
+            color: var(--text-primary);
+        }
+
+        th .sort-icon {
+            display: inline-block;
+            margin-left: 4px;
+            font-size: 0.6rem;
+            opacity: 0.5;
+        }
+
+        th .sort-icon.active {
+            opacity: 1;
+            color: var(--accent-blue);
+        }
+
+        td {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background: var(--bg-card-hover);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tag-you {
+            background: rgba(79, 140, 255, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(79, 140, 255, 0.2);
+        }
+
+        .tag-parents {
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--accent-purple);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .big-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 0.95rem;
+        }
+
+        .empty-state .sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ─── PAGINATION ─── */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 16px 0 4px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 16px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pagination-controls .btn {
+            padding: 6px 14px;
+            font-size: 0.75rem;
+        }
+
+        .pagination-controls .page-info {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 0 8px;
+        }
+
+        .pagination-controls select {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 6px 12px;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .pagination-controls select:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .pagination-controls .per-page-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* ─── MONTHLY SUMMARY ─── */
+        .monthly-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .month-card {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px 18px;
+            transition: var(--transition);
+        }
+
+        .month-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .month-card .month-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .month-card .month-title .month-cost {
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #fff 40%, var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .month-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .month-stats .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .month-stats .stat-item .value {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .month-stats .stat-item .label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: var(--text-muted);
+        }
+
+        .month-bar {
+            height: 3px;
+            background: var(--border-color);
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .month-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            transition: width 0.6s ease;
+        }
+
+        .no-month-data {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ─── FOOTER ACTIONS ─── */
+        .footer-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 16px 0 8px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 8px;
+        }
+
+        .footer-actions .btn {
+            font-size: 0.75rem;
+            padding: 6px 18px;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 700px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .header-left {
+                justify-content: center;
+            }
+            .header-car-info {
+                font-size: 0.7rem;
+                padding: 4px 12px 4px 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header-car-info .car-divider {
+                display: none;
+            }
+            .header-actions {
+                justify-content: center;
+            }
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .form-actions {
+                grid-column: 1 / -1;
+                flex-wrap: wrap;
+            }
+            .form-actions .btn {
+                flex: 1;
+                justify-content: center;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .card {
+                padding: 16px;
+            }
+            th,
+            td {
+                padding: 8px 8px;
+                font-size: 0.72rem;
+            }
+            .stat-number {
+                font-size: 1.4rem;
+            }
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            .monthly-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .pagination {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .pagination-controls {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .filter-inline {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+            }
+            .filter-inline .form-group {
+                flex: 1 1 auto;
+                min-width: unset;
+            }
+            .filter-inline .filter-actions {
+                justify-content: stretch;
+            }
+            .filter-inline .filter-actions .btn {
+                flex: 1;
+                justify-content: center;
+            }
+            .filter-inline .filter-label {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .btn {
+                font-size: 0.75rem;
+                padding: 8px 14px;
+            }
+            .card-title {
+                font-size: 0.95rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-car-info {
+                font-size: 0.6rem;
+                padding: 4px 10px;
+            }
+            .header-car-info .car-plate {
+                font-size: 0.6rem;
+                padding: 1px 8px;
+            }
+            .pagination-controls select {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+            .footer-actions .btn {
+                font-size: 0.65rem;
+                padding: 4px 12px;
+            }
+        }
+
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card {
+            animation: fadeIn 0.35s ease-out;
+        }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 14px 24px;
+            box-shadow: var(--shadow);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 999;
+            transform: translateY(120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 90vw;
+        }
+        .toast.show {
+            transform: translateY(0);
+        }
+        .toast .toast-icon {
+            font-size: 1.2rem;
+        }
+        .toast-success .toast-icon {
+            color: var(--accent-green);
+        }
+        .toast-error .toast-icon {
+            color: var(--accent-red);
+        }
+        .toast-info .toast-icon {
+            color: var(--accent-blue);
+        }
+    </style>
 </head>
 <body>
-  <h2>Leave Application Form beta 1</h2>
-  <input type="text" id="staffName" placeholder="Staff Name" />
-  <input type="date" id="startDate" />
-  <input type="date" id="endDate" />
-  <textarea id="reason" placeholder="Reason (required if after 16th)"></textarea>
-  <button onclick="submitForm()">Submit</button>
 
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbztMLf7qFisO0_dwL1r5SZhaT7RJ6Q7vOyiSlmwaXoV5f7K4zERxgGuo5opitlWUTOm/exec";
+    <div class="app">
 
-    async function submitForm() {
-      const name = document.getElementById("staffName").value;
-      const start = document.getElementById("startDate").value;
-      const end = document.getElementById("endDate").value;
-      const reason = document.getElementById("reason").value;
+        <!-- ═══ HEADER ═══ -->
+        <header class="header">
+            <div class="header-left">
+                <span class="logo-icon">⛽</span>
+                <h1>Logbook</h1>
+                <span class="header-badge">v3.3 · dark</span>
+                <div class="header-car-info">
+                    <span class="car-name">Saga MC2</span>
+                    <span class="car-detail">· Jet Grey</span>
+                    <span class="car-divider">|</span>
+                    <span class="car-detail">1.3L</span>
+                    <span class="car-divider">|</span>
+                    <span class="car-plate">MEA 4069</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <span style="font-size:0.7rem;color:var(--text-muted);">🕐 <span id="currentTimestamp">Loading...</span></span>
+            </div>
+        </header>
 
-      const today = new Date();
-      if (today.getDate() > 16 && reason.trim() === "") {
-        showToast("Emergency reason required for applications after the 16th", "red");
-        return;
-      }
+        <!-- ═══ MONTHLY SUMMARY ═══ -->
+        <section class="card" id="monthlySummaryCard">
+            <div class="card-header" onclick="toggleCard('monthlySummaryBody')">
+                <div class="card-title">📅 Monthly Summary <span class="badge" id="monthlyCount">0 months</span></div>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-body" id="monthlySummaryBody">
+                <div class="monthly-grid" id="monthlyGrid">
+                    <div class="no-month-data">Loading data...</div>
+                </div>
+            </div>
+        </section>
 
-      const res = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ StaffName: name, StartDate: start, EndDate: end, Reason: reason }),
-        headers: { "Content-Type": "application/json" }
-      });
+        <!-- ═══ LOG TRIP ═══ -->
+        <section class="card" id="formCard">
+            <div class="card-header" onclick="toggleCard('formBody')">
+                <div class="card-title">✏️ Log Trip <span class="badge">New entry</span></div>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-body" id="formBody">
+                <form id="tripForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>📍 Start</label>
+                            <input type="text" id="tripStart" placeholder="HOME" />
+                        </div>
+                        <div class="form-group">
+                            <label>📍 Middle (opt.)</label>
+                            <input type="text" id="tripMiddle" placeholder="SHOP" />
+                        </div>
+                        <div class="form-group">
+                            <label>📍 Destination</label>
+                            <input type="text" id="tripDest" placeholder="WORK" required />
+                        </div>
+                        <div class="form-group">
+                            <label>📏 Odometer (km)</label>
+                            <input type="number" id="tripOdo" placeholder="e.g. 17108" step="1" required />
+                        </div>
+                        <div class="form-group">
+                            <label>⛽ Fuel Range (km)</label>
+                            <input type="number" id="tripFuel" placeholder="e.g. 264" step="1" />
+                        </div>
+                        <div class="form-group">
+                            <label>👤 Driver</label>
+                            <select id="tripDriver">
+                                <option value="YOU">🧑 YOU</option>
+                                <option value="PARENTS">👨‍👩‍👧 PARENTS</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="toggle-group">
+                                <label>⛽ Fuel?</label>
+                                <div class="toggle" id="fuelToggle" onclick="toggleFuel()">
+                                    <div class="toggle-knob"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group hidden-field" id="fuelCostGroup">
+                            <label>Fuel Cost (RM)</label>
+                            <input type="number" id="tripFuelCost" placeholder="e.g. 59.70" step="0.01" />
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">➕ Add Trip</button>
+                            <button type="reset" class="btn btn-ghost btn-sm">Reset</button>
+                        </div>
+                    </div>
+                </form>
+                <div style="font-size:0.7rem;color:var(--text-muted);padding-top:12px;border-top:1px solid var(--border-color);margin-top:12px;">
+                    📅 Date &amp; ⏰ Time auto-recorded when you submit
+                </div>
+            </div>
+        </section>
 
-      const json = await res.json();
-      if (json.success) {
-        showToast("Leave submitted!", "green");
-      } else {
-        showToast(json.message, "red");
-      }
-    }
+        <!-- ═══ STATS ═══ -->
+        <section class="card" id="statsCard">
+            <div class="card-header" onclick="toggleCard('statsBody')">
+                <div class="card-title">📊 Stats</div>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-body" id="statsBody">
+                <div class="summary-grid" id="summaryGrid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="sumTrips">0</div>
+                        <div class="stat-label">Trips</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number green" id="sumDistance">0</div>
+                        <div class="stat-label">Total km</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number orange" id="sumFuel">0</div>
+                        <div class="stat-label">Fuel Used (L)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="sumCost">RM0</div>
+                        <div class="stat-label">Est. Cost @ RM1.99/L</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number purple" id="sumEfficiency">0</div>
+                        <div class="stat-label">Avg km/L</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number green" id="sumFuelCost">RM0</div>
+                        <div class="stat-label">Total Fuel Spend</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number orange" id="sumFuelLitres">0</div>
+                        <div class="stat-label">Fuel Purchased (L)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    function showToast(msg, color) {
-      Toastify({
-        text: msg,
-        duration: 3000,
-        gravity: "top",
-        backgroundColor: color
-      }).showToast();
-    }
-  </script>
+        <!-- ═══ TRIP LOG (with Filters inline) ═══ -->
+        <section class="card" id="tableCard">
+            <div class="card-header" onclick="toggleCard('tableBody')">
+                <div class="card-title">
+                    📋 Trip Log
+                    <span class="badge" id="tripCountBadge">0 entries</span>
+                    <!-- ─── FILTERS (inline with title) ─── -->
+                    <div class="filter-inline">
+                        <span class="filter-label">🔍</span>
+                        <div class="form-group">
+                            <input type="date" id="filterDateFrom" />
+                        </div>
+                        <div class="form-group">
+                            <input type="date" id="filterDateTo" />
+                        </div>
+                        <div class="form-group">
+                            <select id="filterDriver">
+                                <option value="ALL">All</option>
+                                <option value="YOU">🧑 YOU</option>
+                                <option value="PARENTS">👨‍👩‍👧 PARENTS</option>
+                            </select>
+                        </div>
+                        <div class="filter-actions">
+                            <button class="btn btn-ghost btn-sm" id="clearFiltersBtn">✕</button>
+                        </div>
+                    </div>
+                </div>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-body" id="tableBody">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-sort="id" onclick="sortTable('id')"># <span class="sort-icon">⇅</span></th>
+                                <th data-sort="date" onclick="sortTable('date')">Date <span class="sort-icon">⇅</span></th>
+                                <th data-sort="start" onclick="sortTable('start')">Start <span class="sort-icon">⇅</span></th>
+                                <th data-sort="middle" onclick="sortTable('middle')">Middle <span class="sort-icon">⇅</span></th>
+                                <th data-sort="dest" onclick="sortTable('dest')">Dest. <span class="sort-icon">⇅</span></th>
+                                <th data-sort="odo" onclick="sortTable('odo')">Odo (km) <span class="sort-icon">⇅</span></th>
+                                <th data-sort="fuel" onclick="sortTable('fuel')">Fuel (km) <span class="sort-icon">⇅</span></th>
+                                <th data-sort="driver" onclick="sortTable('driver')">Driver <span class="sort-icon">⇅</span></th>
+                                <th data-sort="dist" onclick="sortTable('dist')">Dist (km) <span class="sort-icon">⇅</span></th>
+                                <th data-sort="fuelUsed" onclick="sortTable('fuelUsed')">Fuel (L) <span class="sort-icon">⇅</span></th>
+                                <th data-sort="efficiency" onclick="sortTable('efficiency')">km/L <span class="sort-icon">⇅</span></th>
+                                <th data-sort="fuelCost" onclick="sortTable('fuelCost')">Cost (RM) <span class="sort-icon">⇅</span></th>
+                                <th data-sort="fuelLitres" onclick="sortTable('fuelLitres')">L Purchased <span class="sort-icon">⇅</span></th>
+                                <th data-sort="time" onclick="sortTable('time')">Time <span class="sort-icon">⇅</span></th>
+                                <th style="text-align:center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tripTableBody">
+                            <tr>
+                                <td colspan="15" class="empty-state">
+                                    <div class="big-icon">📭</div>
+                                    <p>No trips logged yet</p>
+                                    <div class="sub">Start adding your trips above ⬆️</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ─── PAGINATION ─── -->
+                <div class="pagination" id="paginationControls">
+                    <div class="pagination-controls">
+                        <button class="btn btn-ghost btn-sm" id="prevPageBtn" onclick="changePage(-1)">◀ Prev</button>
+                        <span class="page-info" id="pageInfo">Page 1 of 1</span>
+                        <button class="btn btn-ghost btn-sm" id="nextPageBtn" onclick="changePage(1)">Next ▶</button>
+                    </div>
+                    <div class="pagination-controls">
+                        <span class="per-page-label">Show:</span>
+                        <select id="perPageSelect" onchange="changePerPage()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="999999">All</option>
+                        </select>
+                        <span style="font-size:0.7rem;color:var(--text-muted);">entries</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ FOOTER ACTIONS (Export/Import/Clear at bottom) ═══ -->
+        <div class="footer-actions">
+            <button class="btn btn-ghost btn-sm" id="exportCSV">📥 Export CSV</button>
+            <button class="btn btn-ghost btn-sm" id="importCSVBtn">📤 Import CSV</button>
+            <input type="file" id="importCSVInput" accept=".csv" style="display:none;" />
+            <button class="btn btn-danger btn-sm" id="clearAllBtn">🗑️ Clear All Data</button>
+        </div>
+
+        <!-- ═══ TOAST ═══ -->
+        <div class="toast" id="toast">
+            <span class="toast-icon">✅</span>
+            <span id="toastMessage">Done!</span>
+        </div>
+    </div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // DATA LAYER
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        const STORAGE_KEY = 'tripLogbookData_v3';
+        let trips = [];
+        let nextId = 1000;
+        let sortState = { key: 'date', direction: 'desc' };
+        let currentPage = 1;
+        let perPage = 10;
+
+        function loadData() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                try {
+                    trips = JSON.parse(raw);
+                    trips = trips.map(t => ({ ...t, date: t.date || '' }));
+                    // Remove any entries with empty dates or REST DAY
+                    trips = trips.filter(t => t.date && t.date.length > 0 && t.dest !== 'REST DAY');
+                    if (trips.length > 0) {
+                        const maxId = Math.max(...trips.map(t => t.id || 0));
+                        nextId = maxId + 1;
+                    }
+                } catch (e) {
+                    trips = getSampleTrips();
+                }
+            } else {
+                trips = getSampleTrips();
+            }
+            trips.forEach(t => { if (!t.id) t.id = nextId++; });
+            saveData();
+            renderAll();
+            updateTimestamp();
+            setInterval(updateTimestamp, 1000);
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(trips));
+        }
+
+        function getSampleTrips() {
+            const sample = [];
+            // Removed Aug 14 (REST DAY) and Aug 15 entries
+            const rawData = [
+                { date: '2026-07-11', start: 'HOME', middle: '', dest: 'WORK', odo: 17093, fuel: 294, time: '1445',
+                    driver: 'YOU' },
+                { date: '2026-07-12', start: 'WORK', middle: '', dest: 'HOME', odo: 17108, fuel: 264, time: '0040',
+                    driver: 'YOU' },
+                { date: '2026-07-12', start: 'PARENTS', middle: '', dest: '', odo: 17127, fuel: 239, time: '0914',
+                    driver: 'PARENTS' },
+                { date: '2026-07-12', start: 'HOME', middle: '', dest: 'WORK', odo: 17143, fuel: 207, time: '1215',
+                    driver: 'YOU' },
+                { date: '2026-07-12', start: 'WORK', middle: '', dest: 'HOME', odo: 17157, fuel: 187, time: '2137',
+                    driver: 'YOU' },
+                { date: '2026-07-13', start: 'HOME', middle: '', dest: 'WORK', odo: 17174, fuel: 169, time: '1220',
+                    driver: 'YOU' },
+                { date: '2026-07-13', start: 'WORK', middle: 'CLINIC', dest: 'WORK', odo: 17194, fuel: 131, time: '1750',
+                    driver: 'YOU' },
+                { date: '2026-07-13', start: 'WORK', middle: '', dest: 'HOME', odo: 17208, fuel: 118, time: '1915',
+                    driver: 'YOU' },
+                { date: '2026-07-13', start: 'HOME', middle: '', dest: 'GF', odo: 17222, fuel: 100, time: '2028',
+                    driver: 'YOU' },
+                { date: '2026-07-13', start: 'GF', middle: '', dest: 'FUEL', odo: 17227, fuel: 352, time: '2157',
+                    driver: 'YOU', isFuel: true, fuelCost: 59.70 },
+                { date: '2026-07-13', start: 'FUEL', middle: '', dest: 'HOME', odo: 17237, fuel: 339, time: '2215',
+                    driver: 'YOU' },
+                { date: '2026-07-14', start: 'PARENTS', middle: '', dest: '', odo: 17260, fuel: 317, time: '0946',
+                    driver: 'PARENTS' },
+                { date: '2026-07-14', start: 'HOME', middle: '', dest: 'WORK', odo: 17276, fuel: 297, time: '1038',
+                    driver: 'YOU' },
+                { date: '2026-07-14', start: 'WORK', middle: '', dest: 'HOME', odo: 17290, fuel: 268, time: '2141',
+                    driver: 'YOU' },
+                { date: '2026-07-15', start: 'HOME', middle: '', dest: 'WORK', odo: 17305, fuel: 256, time: '1205',
+                    driver: 'YOU' },
+                { date: '2026-07-15', start: 'WORK', middle: '', dest: 'HOME', odo: 17319, fuel: 223, time: '2233',
+                    driver: 'YOU' },
+                { date: '2026-07-16', start: 'HOME', middle: '', dest: 'WORK', odo: 17334, fuel: 200, time: '0700',
+                    driver: 'YOU' },
+                { date: '2026-07-16', start: 'WORK', middle: '', dest: 'HOME', odo: 17348, fuel: 173, time: '1653',
+                    driver: 'YOU' },
+                { date: '2026-07-17', start: 'HOME', middle: 'SHOP', dest: 'WORK', odo: 17363, fuel: 166, time: '0705',
+                    driver: 'YOU' },
+                { date: '2026-07-17', start: 'WORK', middle: 'SHOP', dest: 'HOME', odo: 17377, fuel: 152, time: '1628',
+                    driver: 'YOU' },
+                { date: '2026-07-18', start: 'HOME', middle: '', dest: 'WORK', odo: 17392, fuel: 138, time: '0704',
+                    driver: 'YOU' },
+                { date: '2026-07-18', start: 'WORK', middle: '', dest: 'HOME', odo: 17406, fuel: 109, time: '1617',
+                    driver: 'YOU' },
+                { date: '2026-07-20', start: 'HOME', middle: '', dest: 'KTP', odo: 17411, fuel: 102, time: '0748',
+                    driver: 'YOU' },
+                { date: '2026-07-20', start: 'KTP', middle: 'SHOP', dest: 'HOME', odo: 17414, fuel: 97, time: '0830',
+                    driver: 'YOU' },
+                { date: '2026-07-22', start: 'PARENTS', middle: '', dest: '', odo: 17476, fuel: 465, time: '',
+                    driver: 'PARENTS' },
+                { date: '2026-07-22', start: '', middle: '', dest: '', odo: 17494, fuel: 432, time: '', driver: 'PARENTS' },
+                { date: '2026-07-23', start: 'HOME', middle: '', dest: 'WORK', odo: 17462, fuel: 403, time: '1341',
+                    driver: 'YOU' },
+                { date: '2026-07-23', start: 'WORK', middle: '', dest: 'HOME', odo: 17477, fuel: 381, time: '1655',
+                    driver: 'YOU' },
+                { date: '2026-07-23', start: 'HOME', middle: '', dest: 'BKT BRU', odo: 17491, fuel: 372, time: '2011',
+                    driver: 'YOU' },
+                { date: '2026-07-23', start: 'BKT BRU', middle: 'SHOP', dest: 'BANK', odo: 17495, fuel: 368, time: '2128',
+                    driver: 'YOU' },
+                { date: '2026-07-23', start: 'BANK', middle: '', dest: 'BKT BRU', odo: 17499, fuel: 361, time: '2142',
+                    driver: 'YOU' },
+                { date: '2026-07-23', start: 'BKT BARU', middle: '', dest: 'GF', odo: 17500, fuel: 360, time: '2218',
+                    driver: 'YOU' },
+                { date: '2026-07-23', start: 'GF', middle: '', dest: 'BANK', odo: 17505, fuel: 348, time: '2239',
+                    driver: 'YOU' },
+                { date: '2026-07-23', start: 'BANK', middle: '', dest: 'HOME', odo: 17519, fuel: 319, time: '2321',
+                    driver: 'YOU' },
+                { date: '2026-07-24', start: 'HOME', middle: '', dest: 'WORK', odo: 17534, fuel: 287, time: '1427',
+                    driver: 'YOU' },
+                { date: '2026-07-24', start: 'WORK', middle: '', dest: 'HOME', odo: 17548, fuel: 256, time: '0024',
+                    driver: 'YOU' },
+                { date: '2026-07-25', start: 'HOME', middle: '', dest: 'WORK', odo: 17563, fuel: 225, time: '1502',
+                    driver: 'YOU' },
+                { date: '2026-07-25', start: 'WORK', middle: '', dest: 'HOME', odo: 17588, fuel: 178, time: '0140',
+                    driver: 'YOU' },
+                { date: '2026-07-26', start: 'HOME', middle: '', dest: 'JASIN', odo: 17610, fuel: 163, time: '1325',
+                    driver: 'YOU' },
+                { date: '2026-07-26', start: 'JASIN', middle: '', dest: 'WORK', odo: 17636, fuel: 147, time: '1455',
+                    driver: 'YOU' },
+                { date: '2026-07-27', start: 'WORK', middle: '', dest: 'HOME', odo: 17649, fuel: 122, time: '0056',
+                    driver: 'YOU' },
+                { date: '2026-07-27', start: 'HOME', middle: '', dest: 'WORK', odo: 17665, fuel: 106, time: '1438',
+                    driver: 'YOU' },
+                { date: '2026-07-28', start: 'WORK', middle: '', dest: 'FUEL', odo: 17672, fuel: 210, time: '0015',
+                    driver: 'YOU', isFuel: true, fuelCost: 45.77 },
+                { date: '2026-07-28', start: 'FUEL', middle: '', dest: 'HOME', odo: 17682, fuel: 205, time: '0032',
+                    driver: 'YOU' },
+                { date: '2026-07-29', start: 'HOME', middle: '', dest: 'WORK', odo: 17697, fuel: 197, time: '0840',
+                    driver: 'YOU' },
+                { date: '2026-07-29', start: 'WORK', middle: '', dest: 'HOME', odo: 17718, fuel: 162, time: '2124',
+                    driver: 'YOU' },
+                { date: '2026-07-30', start: 'HOME', middle: '', dest: 'WORK', odo: 17733, fuel: 153, time: '0848',
+                    driver: 'YOU' },
+                { date: '2026-07-30', start: 'WORK', middle: '', dest: 'SHOP', odo: 17748, fuel: 134, time: '1820',
+                    driver: 'YOU' },
+                { date: '2026-07-31', start: 'HOME', middle: '', dest: 'WORK', odo: 17764, fuel: 125, time: '1054',
+                    driver: 'YOU' },
+                { date: '2026-07-31', start: 'WORK', middle: '', dest: 'HOME', odo: 17778, fuel: 97, time: '2021',
+                    driver: 'YOU' },
+                { date: '2026-08-01', start: 'HOME', middle: '', dest: 'WORK', odo: 17794, fuel: 83, time: '1210',
+                    driver: 'YOU' },
+                { date: '2026-08-01', start: 'WORK', middle: 'FUEL', dest: 'HOME', odo: 17808, fuel: 405, time: '1838',
+                    driver: 'YOU', isFuel: true, fuelCost: 59.70 },
+                { date: '2026-08-02', start: 'PARENTS', middle: 'HOME - TYRE SHOP - HOME', dest: '', odo: 17829,
+                    fuel: '', time: '1527', driver: 'PARENTS' },
+                { date: '2026-08-03', start: 'PARENTS', middle: '', dest: '', odo: 17857, fuel: '', time: '1544',
+                    driver: 'PARENTS' },
+                { date: '2026-08-03', start: '', middle: '', dest: '', odo: 17887, fuel: 291, time: '1230',
+                    driver: 'PARENTS' },
+                { date: '2026-08-05', start: 'HOME', middle: '', dest: 'WORK', odo: 17904, fuel: 252, time: '0852',
+                    driver: 'YOU' },
+                { date: '2026-08-05', start: 'WORK', middle: 'SHOP', dest: 'HOME', odo: 17920, fuel: 223, time: '1833',
+                    driver: 'YOU' },
+                { date: '2026-08-06', start: 'HOME', middle: '', dest: 'WORK', odo: 17935, fuel: 209, time: '0835',
+                    driver: 'YOU' },
+                { date: '2026-08-06', start: 'WORK', middle: '', dest: 'HOME', odo: 17952, fuel: 169, time: '1851',
+                    driver: 'YOU' },
+                { date: '2026-08-07', start: 'HOME', middle: '', dest: 'WORK', odo: 17968, fuel: 142, time: '1255',
+                    driver: 'YOU' },
+                { date: '2026-08-07', start: 'WORK', middle: '', dest: 'HOME', odo: 17981, fuel: 117, time: '2213',
+                    driver: 'YOU' },
+                { date: '2026-08-08', start: 'HOME', middle: '', dest: 'WORK', odo: 17997, fuel: 107, time: '1230',
+                    driver: 'YOU' },
+                { date: '2026-08-08', start: 'WORK', middle: '', dest: 'HOME', odo: 18011, fuel: 82, time: '2141',
+                    driver: 'YOU' },
+                { date: '2026-08-09', start: 'HOME', middle: 'FUEL', dest: 'GF', odo: '', fuel: '', time: '',
+                    driver: 'YOU' },
+                { date: '2026-08-09', start: 'GF', middle: 'EAT', dest: 'HOME', odo: '', fuel: '', time: '',
+                    driver: 'YOU' },
+                { date: '2026-08-10', start: 'HOME', middle: '', dest: 'WORK', odo: 18051, fuel: 441, time: '1312',
+                    driver: 'YOU' },
+                { date: '2026-08-11', start: 'WORK', middle: '', dest: 'HOME', odo: 18065, fuel: 416, time: '0020',
+                    driver: 'YOU' },
+                { date: '2026-08-11', start: 'HOME', middle: '', dest: 'WORK', odo: 18080, fuel: 393, time: '1428',
+                    driver: 'YOU' },
+                { date: '2026-08-12', start: 'WORK', middle: '', dest: 'HOME', odo: 18094, fuel: 364, time: '0010',
+                    driver: 'YOU' },
+                { date: '2026-08-12', start: 'HOME', middle: '', dest: 'WORK', odo: 18110, fuel: 343, time: '1505',
+                    driver: 'YOU' },
+                { date: '2026-08-13', start: 'WORK', middle: '', dest: 'HOME', odo: 18123, fuel: 314, time: '0015',
+                    driver: 'YOU' },
+                { date: '2026-08-13', start: 'HOME', middle: '', dest: 'WORK', odo: '', fuel: '', time: '',
+                    driver: 'YOU' },
+            ];
+            rawData.forEach(t => { t.id = nextId++;
+                t.isFuel = t.isFuel || false;
+                t.fuelCost = t.fuelCost || null; });
+            return rawData;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // TIMESTAMP
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function updateTimestamp() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-MY', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                timeZone: 'Asia/Kuala_Lumpur'
+            });
+            const timeStr = now.toLocaleTimeString('en-MY', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+                timeZone: 'Asia/Kuala_Lumpur'
+            });
+            document.getElementById('currentTimestamp').textContent = dateStr + ' ' + timeStr;
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return hours + minutes;
+        }
+
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.toLocaleString('en-US', { year: 'numeric', timeZone: 'Asia/Kuala_Lumpur' });
+            const month = now.toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Kuala_Lumpur' });
+            const day = now.toLocaleString('en-US', { day: '2-digit', timeZone: 'Asia/Kuala_Lumpur' });
+            return year + '-' + month + '-' + day;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // TOGGLE FUNCTIONS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function toggleCard(bodyId) {
+            const body = document.getElementById(bodyId);
+            if (body) {
+                body.classList.toggle('hidden');
+                const icon = body.closest('.card').querySelector('.collapse-icon');
+                if (icon) icon.textContent = body.classList.contains('hidden') ? '▶' : '▼';
+            }
+        }
+
+        function toggleFuel() {
+            const toggle = document.getElementById('fuelToggle');
+            toggle.classList.toggle('active');
+            const group = document.getElementById('fuelCostGroup');
+            group.classList.toggle('visible');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // SORTING
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function sortTable(key) {
+            if (sortState.key === key) {
+                sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortState.key = key;
+                sortState.direction = 'desc';
+            }
+            currentPage = 1;
+            renderAll();
+            updateSortIcons();
+        }
+
+        function updateSortIcons() {
+            document.querySelectorAll('th[data-sort]').forEach(th => {
+                const icon = th.querySelector('.sort-icon');
+                if (icon) {
+                    const key = th.dataset.sort;
+                    if (key === sortState.key) {
+                        icon.textContent = sortState.direction === 'asc' ? '▲' : '▼';
+                        icon.classList.add('active');
+                    } else {
+                        icon.textContent = '⇅';
+                        icon.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // PAGINATION
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function changePage(delta) {
+            const filtered = getFiltered();
+            const totalPages = Math.ceil(filtered.length / perPage) || 1;
+            currentPage = Math.max(1, Math.min(currentPage + delta, totalPages));
+            renderAll();
+        }
+
+        function changePerPage() {
+            perPage = parseInt(document.getElementById('perPageSelect').value);
+            currentPage = 1;
+            renderAll();
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // RENDER
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function getFiltered() {
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
+            const driver = document.getElementById('filterDriver').value;
+            return trips.filter(t => {
+                if (from && t.date < from) return false;
+                if (to && t.date > to) return false;
+                if (driver !== 'ALL' && t.driver !== driver) return false;
+                return true;
+            });
+        }
+
+        function getSorted(filtered) {
+            const key = sortState.key;
+            const dir = sortState.direction;
+            const sorted = [...filtered];
+            sorted.sort((a, b) => {
+                let va = a[key] ?? '';
+                let vb = b[key] ?? '';
+                if (key === 'id' || key === 'odo' || key === 'fuel' || key === 'dist' || key === 'fuelUsed' || key ===
+                    'efficiency' || key === 'fuelCost' || key === 'fuelLitres') {
+                    va = parseFloat(va) || 0;
+                    vb = parseFloat(vb) || 0;
+                } else if (key === 'date') {
+                    va = va || '0000-00-00';
+                    vb = vb || '0000-00-00';
+                } else {
+                    va = String(va).toLowerCase();
+                    vb = String(vb).toLowerCase();
+                }
+                if (va < vb) return dir === 'asc' ? -1 : 1;
+                if (va > vb) return dir === 'asc' ? 1 : -1;
+                return 0;
+            });
+            return sorted;
+        }
+
+        function getPaginated(sorted) {
+            const total = sorted.length;
+            const totalPages = Math.ceil(total / perPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            const start = (currentPage - 1) * perPage;
+            const end = Math.min(start + perPage, total);
+            return {
+                items: sorted.slice(start, end),
+                total,
+                totalPages,
+                start: total > 0 ? start + 1 : 0,
+                end
+            };
+        }
+
+        function renderAll() {
+            const filtered = getFiltered();
+            const sorted = getSorted(filtered);
+            const paginated = getPaginated(sorted);
+
+            renderTable(paginated.items);
+            renderSummary(filtered);
+            renderMonthlySummary(filtered);
+            renderPagination(paginated);
+
+            document.getElementById('tripCountBadge').textContent = filtered.length + ' entries';
+            document.getElementById('monthlyCount').textContent = getMonths(filtered).length + ' months';
+            updateSortIcons();
+        }
+
+        function renderPagination(paginated) {
+            document.getElementById('pageInfo').textContent =
+                `Page ${currentPage} of ${paginated.totalPages} (${paginated.total} entries)`;
+            document.getElementById('prevPageBtn').disabled = currentPage <= 1;
+            document.getElementById('nextPageBtn').disabled = currentPage >= paginated.totalPages;
+
+            const sel = document.getElementById('perPageSelect');
+            if (parseInt(sel.value) !== perPage) {
+                const options = sel.options;
+                let found = false;
+                for (let i = 0; i < options.length; i++) {
+                    if (parseInt(options[i].value) === perPage) {
+                        sel.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    sel.value = '999999';
+                }
+            }
+        }
+
+        function getMonths(filtered) {
+            const months = new Set();
+            filtered.forEach(t => {
+                if (t.date) {
+                    const m = t.date.substring(0, 7);
+                    months.add(m);
+                }
+            });
+            return Array.from(months).sort();
+        }
+
+        function renderMonthlySummary(filtered) {
+            const grid = document.getElementById('monthlyGrid');
+            const months = getMonths(filtered);
+            if (months.length === 0) {
+                grid.innerHTML = '<div class="no-month-data">No data available</div>';
+                return;
+            }
+            let html = '';
+            months.forEach(month => {
+                const monthTrips = filtered.filter(t => t.date && t.date.startsWith(month));
+                let totalDist = 0,
+                    totalFuel = 0,
+                    totalCost = 0,
+                    totalFuelCost = 0,
+                    totalLitres = 0;
+                let prevOdo = null,
+                    prevFuel = null;
+                const sorted = [...monthTrips].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+                sorted.forEach(t => {
+                    if (t.odo && prevOdo !== null && t.odo > prevOdo && (t.odo - prevOdo) < 500) {
+                        const d = t.odo - prevOdo;
+                        totalDist += d;
+                        if (t.fuel && prevFuel !== null && t.fuel > 0 && prevFuel > 0 && prevFuel > t
+                            .fuel && (prevFuel - t.fuel) < 100) {
+                            const drop = prevFuel - t.fuel;
+                            totalFuel += drop;
+                            totalCost += drop * 1.99;
+                        }
+                    }
+                    if (t.odo) prevOdo = t.odo;
+                    if (t.fuel) prevFuel = t.fuel;
+                    if (t.isFuel && t.fuelCost) {
+                        totalFuelCost += t.fuelCost;
+                        totalLitres += t.fuelCost / 1.99;
+                    }
+                });
+                const avgEff = totalFuel > 0 ? totalDist / totalFuel : 0;
+                const monthName = new Date(month + '-01').toLocaleString('en-US', { month: 'long', year: 'numeric' });
+                const maxDist = Math.max(...months.map(m => {
+                    const mt = filtered.filter(t => t.date && t.date.startsWith(m));
+                    let d = 0,
+                        po = null,
+                        pf = null;
+                    mt.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+                    mt.forEach(t => { if (t.odo && po !== null && t.odo > po && (t.odo - po) < 500) { d += t
+                                .odo - po; } if (t.odo) po = t.odo; });
+                    return d;
+                })) || 1;
+
+                html += `
+                    <div class="month-card">
+                        <div class="month-title">
+                            <span>${monthName}</span>
+                            <span class="month-cost">RM${(totalCost + totalFuelCost).toFixed(2)}</span>
+                        </div>
+                        <div class="month-stats">
+                            <div class="stat-item">
+                                <span class="value">${totalDist.toFixed(0)} km</span>
+                                <span class="label">Distance</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="value">${totalFuel.toFixed(1)} L</span>
+                                <span class="label">Fuel Used</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="value">${avgEff > 0 ? avgEff.toFixed(1) : '-'} km/L</span>
+                                <span class="label">Efficiency</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="value">${monthTrips.length}</span>
+                                <span class="label">Trips</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="value">RM${totalFuelCost.toFixed(2)}</span>
+                                <span class="label">Fuel Spend</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="value">${totalLitres.toFixed(1)} L</span>
+                                <span class="label">Purchased</span>
+                            </div>
+                        </div>
+                        <div class="month-bar">
+                            <div class="fill" style="width:${(totalDist / maxDist) * 100}%;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        function renderTable(items) {
+            const tbody = document.getElementById('tripTableBody');
+            if (items.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="15" class="empty-state"><div class="big-icon">📭</div><p>No trips match your filters</p><div class="sub">Try adjusting the filters above</div></td></tr>`;
+                return;
+            }
+            let html = '';
+            let prevOdo = null,
+                prevFuel = null;
+            items.forEach((t, idx) => {
+                let dist = '-',
+                    fuelUsed = '-',
+                    efficiency = '-',
+                    fuelCost = '-',
+                    fuelLitres = '-';
+                if (t.odo && prevOdo !== null && t.odo > prevOdo && (t.odo - prevOdo) < 500) {
+                    const d = t.odo - prevOdo;
+                    dist = d;
+                    if (t.fuel && prevFuel !== null && t.fuel > 0 && prevFuel > 0 && prevFuel > t.fuel && (prevFuel -
+                            t.fuel) < 100) {
+                        const drop = prevFuel - t.fuel;
+                        fuelUsed = drop;
+                        if (drop > 0) efficiency = d / drop;
+                    }
+                }
+                if (t.odo) prevOdo = t.odo;
+                if (t.fuel) prevFuel = t.fuel;
+
+                if (t.isFuel && t.fuelCost) {
+                    fuelCost = t.fuelCost;
+                    fuelLitres = t.fuelCost / 1.99;
+                }
+
+                const tag = t.driver === 'PARENTS' ?
+                    `<span class="tag tag-parents">👨‍👩‍👧 PARENTS</span>` :
+                    `<span class="tag tag-you">🧑 YOU</span>`;
+
+                const isFuelRow = t.isFuel ? `⭐` : '';
+                const timeDisplay = t.time ? t.time.substring(0, 2) + ':' + t.time.substring(2, 4) : '-';
+
+                html += `<tr>
+                    <td>${idx+1}</td>
+                    <td>${t.date||'-'}</td>
+                    <td>${t.start||'-'}</td>
+                    <td>${t.middle||'-'}</td>
+                    <td>${t.dest||'-'} ${isFuelRow}</td>
+                    <td>${t.odo||'-'}</td>
+                    <td>${t.fuel||'-'}</td>
+                    <td>${tag}</td>
+                    <td>${typeof dist === 'number' ? dist.toFixed(0) : '-'}</td>
+                    <td>${typeof fuelUsed === 'number' ? fuelUsed.toFixed(1) : '-'}</td>
+                    <td>${typeof efficiency === 'number' ? efficiency.toFixed(1) : '-'}</td>
+                    <td>${typeof fuelCost === 'number' ? 'RM' + fuelCost.toFixed(2) : '-'}</td>
+                    <td>${typeof fuelLitres === 'number' ? fuelLitres.toFixed(1) : '-'}</td>
+                    <td>${timeDisplay}</td>
+                    <td style="text-align:center;"><button class="btn btn-danger btn-xs" onclick="deleteTrip(${t.id})">✕</button></td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function renderSummary(filtered) {
+            let totalDist = 0,
+                totalFuel = 0,
+                countEfficiency = 0,
+                sumEfficiency = 0;
+            let totalFuelCost = 0,
+                totalLitres = 0;
+            const sorted = [...filtered].sort((a, b) => {
+                if (a.date !== b.date) return a.date.localeCompare(b.date);
+                return a.id - b.id;
+            });
+            let prevOdo = null,
+                prevFuel = null;
+            sorted.forEach(t => {
+                if (t.odo && prevOdo !== null && t.odo > prevOdo && (t.odo - prevOdo) < 500) {
+                    const d = t.odo - prevOdo;
+                    totalDist += d;
+                    if (t.fuel && prevFuel !== null && t.fuel > 0 && prevFuel > 0 && prevFuel > t.fuel && (prevFuel - t
+                            .fuel) < 100) {
+                        const drop = prevFuel - t.fuel;
+                        totalFuel += drop;
+                        if (drop > 0) { sumEfficiency += d / drop;
+                            countEfficiency++; }
+                    }
+                }
+                if (t.odo) prevOdo = t.odo;
+                if (t.fuel) prevFuel = t.fuel;
+                if (t.isFuel && t.fuelCost) {
+                    totalFuelCost += t.fuelCost;
+                    totalLitres += t.fuelCost / 1.99;
+                }
+            });
+            document.getElementById('sumTrips').textContent = filtered.length;
+            document.getElementById('sumDistance').textContent = totalDist.toFixed(0);
+            document.getElementById('sumFuel').textContent = totalFuel.toFixed(1);
+            document.getElementById('sumCost').textContent = 'RM' + (totalFuel * 1.99).toFixed(2);
+            const avgEff = countEfficiency > 0 ? (sumEfficiency / countEfficiency) : 0;
+            document.getElementById('sumEfficiency').textContent = avgEff > 0 ? avgEff.toFixed(1) : '-';
+            document.getElementById('sumFuelCost').textContent = 'RM' + totalFuelCost.toFixed(2);
+            document.getElementById('sumFuelLitres').textContent = totalLitres.toFixed(1);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // CRUD
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function addTrip(e) {
+            e.preventDefault();
+            const start = document.getElementById('tripStart').value.trim().toUpperCase();
+            const middle = document.getElementById('tripMiddle').value.trim().toUpperCase();
+            const dest = document.getElementById('tripDest').value.trim().toUpperCase();
+            const odo = document.getElementById('tripOdo').value;
+            const fuel = document.getElementById('tripFuel').value;
+            const driver = document.getElementById('tripDriver').value;
+            const isFuel = document.getElementById('fuelToggle').classList.contains('active');
+            const fuelCost = document.getElementById('tripFuelCost').value;
+
+            if (!dest || !odo) {
+                showToast('Please fill in Destination and Odometer', 'error');
+                return;
+            }
+
+            const trip = {
+                id: nextId++,
+                date: getCurrentDate(),
+                start: start || '',
+                middle: middle || '',
+                dest,
+                odo: parseInt(odo),
+                fuel: fuel ? parseInt(fuel) : '',
+                time: getCurrentTime(),
+                driver,
+                isFuel: isFuel || false,
+                fuelCost: isFuel && fuelCost ? parseFloat(fuelCost) : null,
+            };
+
+            trips.push(trip);
+            saveData();
+            renderAll();
+            document.getElementById('tripForm').reset();
+            document.getElementById('fuelToggle').classList.remove('active');
+            document.getElementById('fuelCostGroup').classList.remove('visible');
+            document.getElementById('tripFuelCost').value = '';
+            showToast('Trip added successfully! 🚗', 'success');
+        }
+
+        function deleteTrip(id) {
+            if (!confirm('Delete this trip?')) return;
+            trips = trips.filter(t => t.id !== id);
+            saveData();
+            renderAll();
+            showToast('Trip deleted', 'info');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // EXPORT / IMPORT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function exportCSV() {
+            if (trips.length === 0) { showToast('No data to export', 'error'); return; }
+            const headers = ['id', 'date', 'start', 'middle', 'dest', 'odo', 'fuel', 'time', 'driver', 'isFuel',
+                'fuelCost'
+            ];
+            const rows = trips.map(t => headers.map(h => t[h] ?? '').join(','));
+            const csv = [headers.join(','), ...rows].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'logbook_backup.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Exported ' + trips.length + ' trips', 'success');
+        }
+
+        function importCSV(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+                const lines = text.split('\n').filter(l => l.trim());
+                if (lines.length < 2) { showToast('Invalid CSV', 'error'); return; }
+                const headers = lines[0].split(',').map(h => h.trim());
+                const newTrips = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const vals = lines[i].split(',').map(v => v.trim());
+                    const obj = {};
+                    headers.forEach((h, idx) => { obj[h] = vals[idx] || ''; });
+                    if (obj.date && obj.dest && obj.dest !== 'REST DAY') {
+                        obj.id = nextId++;
+                        obj.odo = parseInt(obj.odo) || '';
+                        obj.fuel = parseInt(obj.fuel) || '';
+                        obj.isFuel = obj.isFuel === 'true' || obj.isFuel === true;
+                        obj.fuelCost = parseFloat(obj.fuelCost) || null;
+                        newTrips.push(obj);
+                    }
+                }
+                if (newTrips.length === 0) { showToast('No valid trips found', 'error'); return; }
+                trips = [...trips, ...newTrips];
+                saveData();
+                renderAll();
+                showToast('Imported ' + newTrips.length + ' trips', 'success');
+            };
+            reader.readAsText(file);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // TOAST
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        let toastTimeout;
+
+        function showToast(msg, type = 'info') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast').querySelector('.toast-icon');
+            const msgEl = document.getElementById('toastMessage');
+            toast.className = 'toast toast-' + type;
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            icon.textContent = icons[type] || 'ℹ️';
+            msgEl.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // EVENTS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        document.getElementById('tripForm').addEventListener('submit', addTrip);
+        document.getElementById('exportCSV').addEventListener('click', exportCSV);
+        document.getElementById('importCSVBtn').addEventListener('click', () => document.getElementById('importCSVInput')
+            .click());
+        document.getElementById('importCSVInput').addEventListener('change', (e) => {
+            if (e.target.files.length) { importCSV(e.target.files[0]);
+                e.target.value = ''; }
+        });
+        document.getElementById('clearAllBtn').addEventListener('click', () => {
+            if (!confirm('Delete ALL trip data? This cannot be undone!')) return;
+            trips = [];
+            saveData();
+            renderAll();
+            showToast('All data cleared', 'info');
+        });
+        document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+            document.getElementById('filterDateFrom').value = '';
+            document.getElementById('filterDateTo').value = '';
+            document.getElementById('filterDriver').value = 'ALL';
+            renderAll();
+            showToast('Filters cleared', 'info');
+        });
+        document.getElementById('filterDateFrom').addEventListener('change', () => { currentPage = 1;
+            renderAll(); });
+        document.getElementById('filterDateTo').addEventListener('change', () => { currentPage = 1;
+            renderAll(); });
+        document.getElementById('filterDriver').addEventListener('change', () => { currentPage = 1;
+            renderAll(); });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // BOOT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        loadData();
+    </script>
+
 </body>
 </html>
